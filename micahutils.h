@@ -10,43 +10,45 @@ namespace micah
 {
     struct MessageOnDestructor
     {
-        MessageOnDestructor( std::string const& message ) : m_message( message ) {}
+        MessageOnDestructor( std::string const& message ) :
+            m_message( message ) {}
         virtual ~MessageOnDestructor()
         {
             std::cerr << m_message << '\n';
         }
-        
+
         std::string m_message;
     };
 
     struct Timer
     {
         Timer() = default;
-        explicit Timer( std::string name ) : m_name( name ) {}
-        
+        explicit Timer( std::string name ) :
+            m_name( name ) {}
+
         virtual ~Timer() noexcept
         {
-            if(!m_durationChecked)
+            if( !m_durationChecked )
             {
                 check_duration();
             }
         }
-        
+
         void reset() noexcept
         {
             m_start = std::chrono::steady_clock::now();
         }
-        
+
         void check_duration() noexcept
         {
             m_durationChecked = true;
-            
+
             if( auto const duration_ms{ std::chrono::duration_cast< std::chrono::microseconds >( std::chrono::steady_clock::now() - m_start ).count() / 1000.0 }; duration_ms > 1.0 )
             {
-                std::cerr << "Time spent" << (m_name.empty() ? "" : " (" + m_name + ")") << ": " << duration_ms << "ms\n";
+                std::cerr << "Time spent" << ( m_name.empty() ? "" : " (" + m_name + ")" ) << ": " << duration_ms << "ms\n";
             }
         }
-        
+
         std::string m_name;
         std::chrono::steady_clock::time_point m_start{ std::chrono::steady_clock::now() };
         bool m_durationChecked{};
