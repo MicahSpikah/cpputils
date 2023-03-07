@@ -43,7 +43,7 @@ namespace micah
         {
             m_durationChecked = true;
 
-            if( auto const duration_ms{ std::chrono::duration_cast< std::chrono::microseconds >( std::chrono::steady_clock::now() - m_start ).count() / 1000.0 }; duration_ms > 1.0 )
+            if( auto const duration_ms{ std::chrono::duration_cast< std::chrono::duration< double, std::milli > >( std::chrono::steady_clock::now() - m_start ).count() }; duration_ms > 1.0 )
             {
                 std::cerr << "Time spent" << ( m_name.empty() ? "" : " (" + m_name + ")" ) << ": " << duration_ms << "ms\n";
             }
