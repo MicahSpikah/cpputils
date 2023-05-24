@@ -54,6 +54,20 @@ namespace micah
         bool m_durationChecked{};
     };
 
+    struct CumulativeTimer
+    {
+        double sum_us_{};
+        int count_{};
+        std::chrono::steady_clock::time_point last_{ std::chrono::steady_clock::now() };
+
+        void Start() { last_ = std::chrono::steady_clock::now(); }
+        void Stop()
+        {
+            sum_us_ += std::chrono::duration_cast< std::chrono::duration< double, std::micro > >( std::chrono::steady_clock::now() - last_ ).count();
+            ++count_;
+        }
+    };
+
     template< typename T, std::size_t size >
     std::array< T, size > GenerateRandomArray( T const min_val, T const max_val )
     {
